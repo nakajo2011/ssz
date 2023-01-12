@@ -21,6 +21,19 @@ describe('Boolean test', () => {
         })
     })
 
+    describe("pack", () => {
+        test("true pack to 0x01 000000.... with right padded. ", () => {
+            const bool = new SSZBoolean(true)
+            expect(bool.pack()).toStrictEqual(Buffer.from([
+                0x01,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0
+            ]))
+        })
+    })
+
     describe("hash_tree_root", () => {
         test.skip("true hash_tree_root is 0xec4916dd28fc4c10d78e287ca5d9cc51ee1ae73cbfde08c6b37324cbfaac8bc5", () => {
             // 値が一致しないのでpending visualizerが間違ってるのかな・・・？
