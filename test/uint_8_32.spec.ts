@@ -62,6 +62,19 @@ describe('Uint8-32 tests', () => {
             })
         })
 
+        describe("pack", () => {
+            test("258 serialize to 0x0201 000000.... with right padded. ", () => {
+                const uint16 = new Uint16(258)
+                expect(uint16.pack()).toStrictEqual(Buffer.from([
+                    0x02, 0x01,
+                    0, 0, 0, 0, 0, 0, 0, 0,
+                    0, 0, 0, 0, 0, 0, 0, 0,
+                    0, 0, 0, 0, 0, 0, 0, 0,
+                    0, 0, 0, 0, 0, 0
+                ]))
+            })
+        })
+
         describe("hash_tree_root", () => {
             test.skip("25263 hash_tree_root is 0xddc1053834e2ee5cb14cd00a7289eea696d3932429b07635f1f4ed63e4c63639", () => {
                 // 値が一致しないのでpending visualizerが間違ってるのかな・・・？
@@ -88,6 +101,19 @@ describe('Uint8-32 tests', () => {
             test("65538 serialize to 0x00010002", () => {
                 const uint32 = new Uint32(65538)
                 expect(uint32.serialize()).toStrictEqual(Buffer.from([0, 1, 0, 2]))
+            })
+        })
+
+        describe("pack", () => {
+            test("65538 serialize to 0x02000100 000000.... with right padded. ", () => {
+                const uint32 = new Uint32(65538)
+                expect(uint32.pack()).toStrictEqual(Buffer.from([
+                    0x02, 0x00, 0x01, 0x00,
+                    0, 0, 0, 0, 0, 0, 0, 0,
+                    0, 0, 0, 0, 0, 0, 0, 0,
+                    0, 0, 0, 0, 0, 0, 0, 0,
+                    0, 0, 0, 0
+                ]))
             })
         })
     })

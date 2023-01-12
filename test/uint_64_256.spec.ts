@@ -33,6 +33,18 @@ describe('Uint64 test', () => {
         })
     })
 
+    describe("pack", () => {
+        test("1074290484554641408 serialize to 0x000376fd80a5e80e 000000.... with right padded. ", () => {
+            const uint64 = new Uint64(BigInt("1074290484554641408"))
+            expect(uint64.pack()).toStrictEqual(Buffer.from([
+                0x00, 0x30, 0x76, 0xfd, 0x80, 0xa5, 0xe8, 0x0e,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0
+            ]))
+        })
+    })
+
     describe("hash_tree_root", () => {
         test.skip("8885452543309451264 hash_tree_root is 0x352dca03e22ab91dc28455e1f9b11416a333e9b5b434f48d9e513dfada71987a", () => {
             // 値が一致しないのでpending visualizerが間違ってるのかな・・・？
@@ -88,6 +100,19 @@ describe('Uint128 test', () => {
             ]))
         })
     })
+
+    describe("pack", () => {
+        test("149645059347763192342463364210314182657 serialize to 0x010000000000000000f0b0a90f979470 000000.... with right padded. ", () => {
+            const uint128 = new Uint128(BigInt("149645059347763192342463364210314182657"))
+            expect(uint128.pack()).toStrictEqual(Buffer.from([
+                0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+                0x00, 0xf0, 0xb0, 0xa9, 0x0f, 0x97, 0x94, 0x70,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0
+            ]))
+        })
+    })
+
 })
 
 describe('Uint256 test', () => {
@@ -131,6 +156,18 @@ describe('Uint256 test', () => {
                     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
                     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
                 ]))
+        })
+    })
+
+    describe("pack", () => {
+        test("96814945308074128438355407024091610994943375043996834784544491954722220015616 pack to little-endian", () => {
+            const uint256 = new Uint256(BigInt("96814945308074128438355407024091610994943375043996834784544491954722220015616"))
+            expect(uint256.pack()).toStrictEqual(Buffer.from([
+                0xd6, 0x0b, 0x51, 0x32, 0x26, 0xd9, 0x00, 0x00,
+                0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+                0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+                0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+            ]).reverse())
         })
     })
 
