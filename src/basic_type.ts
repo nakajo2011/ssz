@@ -10,6 +10,7 @@ export interface SSZType {
     hash_tree_root(): Buffer
     pack(): Buffer
     merkleize(): Buffer
+    is_variable_size(): boolean
 }
 
 export abstract class BasicBase implements SSZType {
@@ -27,7 +28,9 @@ export abstract class BasicBase implements SSZType {
      * serialize is 32bytes little endian.
      */
     serialize(): Buffer {
-        return this.value
+        const res = Buffer.alloc(this.value.length)
+        this.value.copy(res)
+        return res.reverse()
     }
 
     hash_tree_root(): Buffer {
@@ -41,6 +44,10 @@ export abstract class BasicBase implements SSZType {
     }
 
     abstract merkleize(): Buffer
+
+    is_variable_size(): boolean {
+        return false;
+    }
 
 }
 

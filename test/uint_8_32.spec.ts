@@ -56,9 +56,10 @@ describe('Uint8-32 tests', () => {
         })
 
         describe("serialize", () => {
-            test("258 serialize to 0x0102", () => {
+            test("258 serialize to 0x0201", () => {
                 const uint16 = new Uint16(258)
-                expect(uint16.serialize()).toStrictEqual(Buffer.from([1, 2]))
+                expect(uint16.serialize()).toStrictEqual(Buffer.from([2, 1]))
+                expect(uint16.serialize()).toStrictEqual(Buffer.from([2, 1])) // check return same value if second call too.
             })
         })
 
@@ -98,9 +99,9 @@ describe('Uint8-32 tests', () => {
         })
 
         describe("serialize", () => {
-            test("65538 serialize to 0x00010002", () => {
+            test("65538 serialize to 0x02000100", () => {
                 const uint32 = new Uint32(65538)
-                expect(uint32.serialize()).toStrictEqual(Buffer.from([0, 1, 0, 2]))
+                expect(uint32.serialize()).toStrictEqual(Buffer.from([2, 0, 1, 0]))
             })
         })
 
