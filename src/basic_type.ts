@@ -1,7 +1,7 @@
 /**
  * SSZ Basic Type(uintN, boolean)
  */
-import {BYTES_PER_CHUNK, sha256} from "./constants";
+import {BYTES_PER_CHUNK} from "./constants";
 
 
 export interface SSZType {
@@ -10,6 +10,7 @@ export interface SSZType {
     hash_tree_root(): Buffer
     pack(): Buffer
     merkleize(): Buffer
+    chunk_count(): number
     is_variable_size(): boolean
 }
 
@@ -34,21 +35,26 @@ export abstract class BasicBase implements SSZType {
     }
 
     hash_tree_root(): Buffer {
-        return sha256(this.pack())
+        return this.merkleize()
     }
 
     pack(): Buffer {
         const res = Buffer.alloc(BYTES_PER_CHUNK)
-        this.value.reverse().copy(res, 0)
+        this.serialize().copy(res, 0)
         return res
     }
 
-    abstract merkleize(): Buffer
+    merkleize(): Buffer {
+        return this.pack()
+    }
 
     is_variable_size(): boolean {
         return false;
     }
 
+    chunk_count(): number {
+        return 1
+    }
 }
 
 abstract class UintBasePrimitive extends BasicBase {
@@ -57,11 +63,6 @@ abstract class UintBasePrimitive extends BasicBase {
         buf.writeUintBE(val, 0, size)
         super(buf)
     }
-
-     merkleize(): Buffer {
-        return this.pack()
-     }
-
 }
 
 export class Uint8 extends UintBasePrimitive {
@@ -100,10 +101,6 @@ abstract class UintBaseBigInt extends BasicBase {
         super(buf)
         this.byteSize = size
     }
-
-    merkleize(): Buffer {
-        return this.pack()
-    }
 }
 
 export class Uint64 extends UintBaseBigInt {
@@ -130,9 +127,4 @@ export class SSZBoolean extends BasicBase {
         buf[0] = _bool ? 1: 0
         super(buf)
     }
-
-    merkleize(): Buffer {
-        return this.pack()
-    }
-
 }

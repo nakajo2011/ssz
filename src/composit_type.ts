@@ -1,6 +1,6 @@
 import {BasicBase, SSZBoolean, SSZType, Uint16, Uint32, Uint8} from "./basic_type";
-import {BITS_PER_BYTE, BYTES_PER_CHUNK, BYTES_PER_LENGTH_OFFSET, sha256} from "./constants";
-import {count_chunk} from "./utils";
+import {BITS_PER_BYTE, BYTES_PER_CHUNK, BYTES_PER_LENGTH_OFFSET} from "./constants";
+import {count_chunk, merkleRoot, next_pow_of_two} from "./utils";
 import assert from "node:assert";
 
 const bitSize = <T extends SSZType>(val: T): number => {
@@ -22,20 +22,21 @@ const sum = (list: number[]): bigint => {
 }
 
 export abstract class CompositeBase<T extends SSZType> implements SSZType {
-    readonly abstract value: Buffer;
+    readonly abstract value: Buffer
     readonly abstract payload: Array<T>
     readonly abstract chunks: number
     readonly abstract size: number
 
-    abstract hash_tree_root(): Buffer;
+    abstract hash_tree_root(): Buffer
 
-    abstract serialize(): Buffer;
+    abstract serialize(): Buffer
 
-    abstract merkleize(): Buffer;
+    abstract merkleize(): Buffer
 
-    abstract pack(): Buffer;
+    abstract pack(): Buffer
 
-    abstract is_variable_size(): boolean;
+    abstract is_variable_size(): boolean
+    abstract chunk_count(): number
 
 }
 
@@ -71,7 +72,7 @@ export class Vector<T extends BasicBase> extends CompositeBase<T> {
     }
 
     hash_tree_root(): Buffer {
-        return sha256(this.serialize());
+        return this.merkleize()
     }
 
     serialize(): Buffer {
@@ -79,7 +80,15 @@ export class Vector<T extends BasicBase> extends CompositeBase<T> {
     }
 
     merkleize(): Buffer {
-        throw "not yet implement.";
+        const limit = next_pow_of_two(this.chunks)
+        const leafs = [...Array(limit).keys()].map(() => Buffer.alloc(BYTES_PER_CHUNK))
+        let offset = 0
+        for(const buf of leafs) {
+            this.value.copy(buf, 0, offset, offset+BYTES_PER_CHUNK)
+            offset += BYTES_PER_CHUNK
+        }
+        const maxDepth = Math.log2(limit)
+        return merkleRoot(leafs, maxDepth)
     }
 
     pack(): Buffer {
@@ -90,6 +99,10 @@ export class Vector<T extends BasicBase> extends CompositeBase<T> {
 
     is_variable_size(): boolean {
         return false;
+    }
+
+    chunk_count(): number {
+        return this.chunks
     }
 }
 
@@ -115,7 +128,7 @@ export abstract class Container extends CompositeBase<SSZType> {
             "contents size is too large.")
 
         this.size = Number(total_length)
-        this.chunks = count_chunk(8, this.size)
+        this.chunks = this.payload.length
 
         const variable_offsets: Buffer[] = this.payload.map((v, i) =>
             new Uint32(Number(sum(fixed_length) + sum(variable_length.slice(0, i)))).serialize()
@@ -149,14 +162,23 @@ export abstract class Container extends CompositeBase<SSZType> {
     }
 
     hash_tree_root(): Buffer {
-        return Buffer.alloc(0)
+        return this.merkleize()
     }
 
     merkleize(): Buffer {
-        return Buffer.alloc(4)
+        const limit = next_pow_of_two(this.chunk_count())
+        const buffers = [...Array(limit).keys()].map(() => Buffer.alloc(BYTES_PER_CHUNK))
+        this.payload.forEach((p, i) => {
+            buffers[i] = p.hash_tree_root()
+        })
+        return merkleRoot(buffers, Math.log2(buffers.length))
     }
 
     is_variable_size(): boolean {
         return true
+    }
+
+    chunk_count(): number {
+        return this.payload.length;
     }
 }
