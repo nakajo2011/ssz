@@ -1,6 +1,5 @@
 import {BLSPubkey, BLSSignature, Bytes, DepositData, Gwei} from "../src/eth2_schemas";
-import * as fs from "fs";
-import {uncompressSync} from "snappy"
+import {readSerializeData} from "./test_util";
 
 describe("Container test", () => {
     describe("DepsositData", () => {
@@ -11,9 +10,7 @@ describe("Container test", () => {
                 new Gwei(BigInt("1778195238878610085")),
                 new BLSSignature("0xcfd0fd3c4620e890ea79b3854bbb25f514c21aa70955fc78314c9c7fd151710e60680ad90be70177688f40f25b9e5c642b6f9e233f2ba5df64c63d0da6ccb43f34a6324b27ad5d4b392ac771e648bc64a6aabd5298d25e3f02b2bffd40b85f34")
             )
-
-            const snappy = fs.readFileSync("test/resources/DepositData/ssz_random/case_0/serialized.ssz_snappy", "hex")
-            const serializedData = uncompressSync(Buffer.from(snappy, 'hex'))
+            const serializedData = readSerializeData("DepositData", "case_0")
             expect(depositData.serialize()).toStrictEqual(serializedData)
         })
     })
