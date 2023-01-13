@@ -1,9 +1,9 @@
 import {BLSPubkey, BLSSignature, Bytes, DepositData, Gwei} from "../src/eth2_schemas";
 import {readSerializeData} from "./test_util";
 
-describe("Container test", () => {
-    describe("DepsositData", () => {
-        test("serialize", () => {
+describe("DepsositData", () => {
+    describe("serialize", () => {
+        test("case_0", () => {
             const depositData: DepositData = new DepositData(
                 new BLSPubkey("0x6520084850420d1dfb4432a929dfcc5632bfda9930b58031465b314a326a565bf3d66bd66e8d997cfe4d358ae2e248f0"),
                 new Bytes("0xac16207efbbae531fa3355f9ffc079cc1372194dc973cfa8faa4bc52699fb25c", 32),
