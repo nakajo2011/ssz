@@ -98,15 +98,16 @@ export class List<T extends BasicBase> extends CompositeBase<T> {
     readonly chunks: number
     readonly size: number
 
-    constructor(list: Array<T>, maxLength: number) {
+    constructor(ctor: (new () => T), list: Array<T>, maxLength: number) {
         if(list.length > maxLength) {
             throw `Out of size. maxLength is ${maxLength}, but elements length is ${list.length}.`
         }
         super()
         this.payload = list
         this.size = maxLength
-        this.chunks = count_chunk(list[0].serialize().length * BITS_PER_BYTE, this.size)
-        this.value = Buffer.alloc(list.length * list[0].serialize().length, 0)
+        const elem = new ctor()
+        this.chunks = count_chunk(elem.serialize().length * BITS_PER_BYTE, this.size)
+        this.value = Buffer.alloc(list.length * elem.serialize().length, 0)
 
         this._build()
     }
@@ -223,7 +224,7 @@ export abstract class Container extends CompositeBase<SSZType> {
     }
 
     is_variable_size(): boolean {
-        return true
+        return this.payload.reduce<boolean>((p:boolean, c:SSZType) => p || c.is_variable_size(), false)
     }
 
     chunk_count(): number {

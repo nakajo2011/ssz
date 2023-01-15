@@ -7,32 +7,32 @@ describe('List test', () => {
         describe('Uint8 List', () => {
             describe('chunk size', () => {
                 test('length 4, elements size 2, then chunk size is 1', () => {
-                    const listuint8 = new List(generateArray(2, Uint8), 4)
+                    const listuint8 = new List(Uint8, generateArray(2, Uint8), 4)
                     expect(listuint8.chunks).toBe(1)
                 })
                 test('length 32, elements size 2, then chunk size is 1', () => {
-                    const listuint8 = new List(generateArray(2, Uint8), 32)
+                    const listuint8 = new List(Uint8, generateArray(2, Uint8), 32)
                     expect(listuint8.chunks).toBe(1)
                 })
                 test('length 33, elements size 2, then chunk size is 2', () => {
-                    const listuint8 = new List(generateArray(2, Uint8), 33)
+                    const listuint8 = new List(Uint8, generateArray(2, Uint8), 33)
                     expect(listuint8.chunks).toBe(2)
                 })
                 test('length 256, elements size 2, then chunk size is 8', () => {
-                    const listuint8 = new List(generateArray(2, Uint8), 256)
+                    const listuint8 = new List(Uint8, generateArray(2, Uint8), 256)
                     expect(listuint8.chunks).toBe(8)
                 })
             })
             describe('size out of error', () => {
                 test("length 2, elements size 3, then throw out of length error", () => {
-                    expect(() => new List(generateArray(3, Uint8), 2)).toThrow("Out of size. maxLength is 2, but elements length is 3.")
+                    expect(() => new List(Uint8, generateArray(3, Uint8), 2)).toThrow("Out of size. maxLength is 2, but elements length is 3.")
                 })
             })
         })
 
         describe('List elements are [0x01, 0x02]', () => {
             const subject = (): List<Uint8> => {
-                return new List<Uint8>(generateArray(2, Uint8), 32)
+                return new List<Uint8>(Uint8, generateArray(2, Uint8), 32)
             }
             test('serialized to 0x0102', () => {
                 expect(subject().serialize()).toStrictEqual(Buffer.from('0102', 'hex'))
@@ -50,7 +50,7 @@ describe('List test', () => {
 
         describe('List elements are [0x01, 0x02] and maxLength is 128', () => {
             const subject = (): List<Uint8> => {
-                return new List<Uint8>(generateArray(2, Uint8), 128)
+                return new List<Uint8>(Uint8, generateArray(2, Uint8), 128)
             }
             test('serialized to 0x0102', () => {
                 expect(subject().serialize()).toStrictEqual(Buffer.from('0102', 'hex'))
@@ -83,7 +83,7 @@ describe('List test', () => {
 
         describe('List elements are[0x01, 0x02 ... 0x21]', () => {
             const subject = (): List<Uint8> => {
-                return new List<Uint8>(generateArray(33, Uint8), 64)
+                return new List<Uint8>(Uint8, generateArray(33, Uint8), 64)
             }
             test('when vec length is 33 then serialize size is 33', () => {
                 expect(subject().serialize().length).toBe(33)
