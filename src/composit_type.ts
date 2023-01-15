@@ -98,7 +98,7 @@ export class List<T extends BasicBase> extends CompositeBase<T> {
     readonly chunks: number
     readonly size: number
 
-    constructor(ctor: (new () => T), list: Array<T>, maxLength: number) {
+    constructor(ctor: (new () => T), list: Array<T> = [], maxLength: number) {
         if(list.length > maxLength) {
             throw `Out of size. maxLength is ${maxLength}, but elements length is ${list.length}.`
         }

@@ -3,15 +3,21 @@ import {Uint64, Uint8} from "./basic_type";
 import {MAX_VALIDATORS_PER_COMMITTEE} from "./constants";
 
 export class Bytes extends Vector<Uint8> {
-    constructor(vec: string, size: number) {
-        if(vec.startsWith('0x')) {
-            vec = vec.substring(2)
+    constructor(vec: string = "0x00", size: number) {
+        let uint8vec: Uint8[] = []
+        if(vec !== "0x00") {
+            if (vec.startsWith('0x')) {
+                vec = vec.substring(2)
+            }
+            const buf = Buffer.from(vec, 'hex')
+            uint8vec = new Array<Uint8>(buf.length)
+            Buffer.from(vec, 'hex').forEach((v, i) => {
+                uint8vec[i] = new Uint8(v)
+            })
+        } else {
+            // default value not check length
+            uint8vec = [...Array(size).keys()].map(() => new Uint8())
         }
-        const buf = Buffer.from(vec, 'hex')
-        const uint8vec = new Array<Uint8>(buf.length)
-        Buffer.from(vec, 'hex').forEach((v, i) => {
-            uint8vec[i] = new Uint8(v)
-        })
         super(uint8vec)
         if(uint8vec.length !== size) {
             throw this.constructor.name + " must be " + size + "bytes value"
@@ -20,7 +26,7 @@ export class Bytes extends Vector<Uint8> {
 }
 
 export class Bytes32 extends Bytes {
-    constructor(vec: string = "0x0000000000000000000000000000000000000000000000000000000000000000") {
+    constructor(vec: string = "0x00") {
         super(vec, 32)
     }
 }
@@ -40,7 +46,7 @@ export class BLSPubkey extends Bytes {
  * @description BLSSignature Bytes96 a BLS12-381 signature
  */
 export class BLSSignature extends Bytes {
-    constructor(vec: string = "0x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000") {
+    constructor(vec: string = "0x00") {
         super(vec, 96);
     }
 }
