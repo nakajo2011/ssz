@@ -1,14 +1,6 @@
 import {Vector} from "../src/composit_type";
-import {BasicBase, Uint8} from "../src/basic_type";
-
-const generateArray = <T extends BasicBase>(length: number, ctor: { new (val:number): T}): T[] => {
-    const vec: T[] = Array(length)
-
-    for(let i:number = 0; i < length; i++) {
-        vec[i] = new ctor(i+1)
-    }
-    return vec
-}
+import {Uint8} from "../src/basic_type";
+import {generateArray} from "./test_util";
 
 describe('Vector test', () => {
     describe('chunks length', () => {

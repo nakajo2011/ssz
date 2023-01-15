@@ -1,17 +1,7 @@
-import {BasicBase, SSZBoolean, SSZType, Uint16, Uint32, Uint8} from "./basic_type";
+import {BasicBase, SSZType, Uint32} from "./basic_type";
 import {BITS_PER_BYTE, BYTES_PER_CHUNK, BYTES_PER_LENGTH_OFFSET} from "./constants";
 import {count_chunk, merkleRoot, next_pow_of_two} from "./utils";
 import assert from "node:assert";
-
-const bitSize = <T extends SSZType>(val: T): number => {
-    if(val instanceof Uint8) {
-        return 8
-    } else if(val instanceof Uint16) {
-        return 16
-    } else {
-        throw "unknown type"
-    }
-}
 
 const sum = (list: number[]): bigint => {
     let res = BigInt(0)
@@ -53,21 +43,17 @@ export class Vector<T extends BasicBase> extends CompositeBase<T> {
         }
         this.payload = vec
         this.size = vec.length
-        this.chunks = count_chunk(bitSize(vec[0]), this.size)
-        this.value = Buffer.alloc(vec.length * bitSize(vec[0]) / BITS_PER_BYTE, 0)
+        this.chunks = count_chunk(vec[0].serialize().length * BITS_PER_BYTE, this.size)
+        this.value = Buffer.alloc(vec.length * vec[0].serialize().length, 0)
 
         this._build()
     }
 
     private _build(): void {
         let offset = 0
-        if(this.payload[0] instanceof SSZBoolean) {
-            // nothing implements
-        } else {
-            for(const v of this.payload) {
-                v.value.copy(this.value, offset)
-                offset += bitSize(v) / BITS_PER_BYTE
-            }
+        for(const v of this.payload) {
+            v.serialize().copy(this.value, offset)
+            offset += v.serialize().length
         }
     }
 
@@ -99,6 +85,68 @@ export class Vector<T extends BasicBase> extends CompositeBase<T> {
 
     is_variable_size(): boolean {
         return false;
+    }
+
+    chunk_count(): number {
+        return this.chunks
+    }
+}
+
+export class List<T extends BasicBase> extends CompositeBase<T> {
+    readonly value: Buffer
+    readonly payload: Array<T>
+    readonly chunks: number
+    readonly size: number
+
+    constructor(list: Array<T>, maxLength: number) {
+        if(list.length > maxLength) {
+            throw `Out of size. maxLength is ${maxLength}, but elements length is ${list.length}.`
+        }
+        super()
+        this.payload = list
+        this.size = maxLength
+        this.chunks = count_chunk(list[0].serialize().length * BITS_PER_BYTE, this.size)
+        this.value = Buffer.alloc(list.length * list[0].serialize().length, 0)
+
+        this._build()
+    }
+
+    private _build(): void {
+        let offset = 0
+        for(const v of this.payload) {
+            v.serialize().copy(this.value, offset)
+            offset += v.serialize().length
+        }
+    }
+
+    hash_tree_root(): Buffer {
+        return this.merkleize()
+    }
+
+    serialize(): Buffer {
+        return this.value;
+    }
+
+    merkleize(): Buffer {
+        const limit = next_pow_of_two(this.chunks)
+        const leafs = [...Array(limit).keys()].map(() => Buffer.alloc(BYTES_PER_CHUNK))
+        let offset = 0
+        for(const buf of leafs) {
+            this.value.copy(buf, 0, offset, offset+BYTES_PER_CHUNK)
+            offset += BYTES_PER_CHUNK
+        }
+        const maxDepth = Math.log2(limit)
+        return merkleRoot(leafs, maxDepth)
+    }
+
+    pack(): Buffer {
+        const packed = Buffer.alloc(this.chunks * BYTES_PER_CHUNK, 0)
+        this.value.copy(packed)
+        return packed
+    }
+
+    is_variable_size(): boolean {
+        return true;
     }
 
     chunk_count(): number {

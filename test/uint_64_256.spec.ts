@@ -174,10 +174,15 @@ describe("Uint64-256 Tests", () => {
 
         describe("hash_tree_root", () => {
             test("79340274708781316782873944304686700593778955277119709978269132287709814980608 " +
-                "hash_tree_root is 18a415980f2e4f6caf41fc8fd51dd14d894b9c75626a80fdda257b1d4f3b46fa", () => {
+                "hash_tree_root is little-endian", () => {
                 const uint256 = new Uint256(BigInt("79340274708781316782873944304686700593778955277119709978269132287709814980608"))
-                expect(uint256.hash_tree_root().toString('hex'))
-                    .toBe("18a415980f2e4f6caf41fc8fd51dd14d894b9c75626a80fdda257b1d4f3b46fa")
+                expect(uint256.hash_tree_root())
+                    .toStrictEqual(Buffer.from([
+                        0xaf, 0x69, 0x01, 0x0d, 0x78, 0x6d, 0x00, 0x00,
+                        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+                        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+                        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+                    ]).reverse())
             })
         })
     })

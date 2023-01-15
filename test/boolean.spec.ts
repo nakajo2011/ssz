@@ -42,10 +42,10 @@ describe('Boolean test', () => {
                 .toBe("ec4916dd28fc4c10d78e287ca5d9cc51ee1ae73cbfde08c6b37324cbfaac8bc5")
         })
 
-        test("false hash_tree_root is 0x66687aadf862bd776c8fc18b8e9f8e20089714856ee233b3902a591d0d5f2925", () => {
+        test("false hash_tree_root is 0x0000...00", () => {
             const bool = new SSZBoolean(false)
             expect(bool.hash_tree_root().toString('hex'))
-                .toBe("66687aadf862bd776c8fc18b8e9f8e20089714856ee233b3902a591d0d5f2925")
+                .toBe("0000000000000000000000000000000000000000000000000000000000000000")
         })
     })
 })
