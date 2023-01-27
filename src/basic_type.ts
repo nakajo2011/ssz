@@ -66,19 +66,19 @@ abstract class UintBasePrimitive extends BasicBase {
 }
 
 export class Uint8 extends UintBasePrimitive {
-    constructor(val: number = 0) {
+    constructor(val = 0) {
         super(val, 1)
     }
 }
 
 export class Uint16 extends UintBasePrimitive {
-    constructor(val: number = 0) {
+    constructor(val = 0) {
         super(val, 2)
     }
 }
 
 export class Uint32 extends UintBasePrimitive {
-    constructor(val: number = 0) {
+    constructor(val = 0) {
         super(val, 4)
     }
 }

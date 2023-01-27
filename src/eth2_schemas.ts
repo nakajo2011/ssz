@@ -3,7 +3,7 @@ import {Uint64, Uint8} from "./basic_type";
 import {MAX_VALIDATORS_PER_COMMITTEE} from "./constants";
 
 export class Bytes extends Vector<Uint8> {
-    constructor(vec: string = "0x00", size: number) {
+    constructor(vec = "0x00", size: number) {
         let uint8vec: Uint8[] = []
         if(vec !== "0x00") {
             if (vec.startsWith('0x')) {
@@ -26,7 +26,7 @@ export class Bytes extends Vector<Uint8> {
 }
 
 export class Bytes32 extends Bytes {
-    constructor(vec: string = "0x00") {
+    constructor(vec = "0x00") {
         super(vec, 32)
     }
 }
@@ -46,7 +46,7 @@ export class BLSPubkey extends Bytes {
  * @description BLSSignature Bytes96 a BLS12-381 signature
  */
 export class BLSSignature extends Bytes {
-    constructor(vec: string = "0x00") {
+    constructor(vec = "0x00") {
         super(vec, 96);
     }
 }
