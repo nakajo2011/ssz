@@ -4,6 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "build": "tsc --build",
+    "clean": "tsc --build --clean",
     "lint": "eslint src --ext .ts",
     "lint:fix": "npm run lint -- --fix",
     "test": "jest"
@@ -12,6 +14,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "buffer": "^6.0.3",
     "js-yaml": "^4.1.0",
     "snappy": "^7.2.2",
     "typescript": "^4.9.4"

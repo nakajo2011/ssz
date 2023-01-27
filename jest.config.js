@@ -2,5 +2,6 @@
 module.exports = {
   preset: 'ts-jest',
   testEnvironment: 'node',
-  maxWorkers: 1
+  maxWorkers: 1,
+  testPathIgnorePatterns: ["visualizer/"]
 };
