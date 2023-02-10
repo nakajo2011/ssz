@@ -1,7 +1,7 @@
 import * as React from 'react';
 import Typography from '@mui/material/Typography';
 import Title from './Title';
-import {Uint8, Uint16} from "../lib/basic_type";
+import {Uint8, Uint16, Uint32, Uint64, Uint128, Uint256, SSZBoolean} from "../lib/basic_type";
 
 import { useAppSelector } from '../store/hooks'
 import {RootState} from "../store";
@@ -9,11 +9,22 @@ import {Alert, Box, BoxProps, Stack} from "@mui/material";
 
 const factory = (state: RootState) => {
     try {
+        console.log(state.type_name)
         switch (state.type_name) {
             case "Uint8":
                 return new Uint8(parseInt(state.value))
             case "Uint16":
                 return new Uint16(parseInt(state.value))
+            case "Uint32":
+                return new Uint32(parseInt(state.value))
+            case "Uint64":
+                return new Uint64(BigInt(state.value))
+            case "Uint128":
+                return new Uint128(BigInt(state.value))
+            case "Uint256":
+                return new Uint256(BigInt(state.value))
+            case "Boolean":
+                return new SSZBoolean(state.value !== '0')
             default:
                 return undefined
         }
@@ -59,9 +70,9 @@ function ByteDumpLine(props: ByteDumpLineProps) {
     const { sx, ...other} = props
     const list = Array<JSX.Element>()
     const view = new Uint8Array(other.bytedata)
-    for(const b of view) {
-        list.push(<Item>{hex(b)}</Item>)
-    }
+    view.forEach((b, index) => {
+        list.push(<Item key={index}>{hex(b)}</Item>)
+    })
     return (
         <Box
             sx={{
@@ -74,7 +85,7 @@ function ByteDumpLine(props: ByteDumpLineProps) {
                     display: 'flex',
                     alignItems: 'center',
                     p: 1,
-                    width: '128px',
+                    width: '8rem',
                 }}
             >
                 <Typography sx={{

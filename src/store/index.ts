@@ -4,6 +4,10 @@ import { createSlice, configureStore, PayloadAction } from '@reduxjs/toolkit';
 export const TypeOptions = {
     Uint8: "Uint8",
     Uint16: "Uint16",
+    Uint32: "Uint32",
+    Uint64: "Uint64",
+    Uint128: "Uint128",
+    Uint256: "Uint256",
     Boolean: "Boolean"
 } as const;
 type TypeOptions = typeof TypeOptions[keyof typeof TypeOptions];
