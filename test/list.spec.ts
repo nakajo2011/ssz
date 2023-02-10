@@ -1,5 +1,5 @@
-import {Uint8} from "../src/basic_type";
-import {List} from "../src/composit_type";
+import {Uint8} from "../src/lib/basic_type";
+import {List} from "../src/lib/composit_type";
 import {generateArray} from "./test_util";
 
 describe('List test', () => {

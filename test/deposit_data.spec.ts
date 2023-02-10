@@ -1,4 +1,4 @@
-import {BLSPubkey, BLSSignature, Bytes, DepositData, Gwei} from "../src/eth2_schemas";
+import {BLSPubkey, BLSSignature, Bytes, DepositData, Gwei} from "../src/lib/eth2_schemas";
 import {readHashRoot, readSerializeData} from "./test_util";
 
 describe("DepsositData", () => {

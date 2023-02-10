@@ -1,4 +1,4 @@
-import {Uint16, Uint32, Uint8} from "../src/basic_type";
+import {Uint16, Uint32, Uint8} from "../src/lib/basic_type";
 
 describe('Uint8-32 tests', () => {
     describe('Uint8 test', () => {

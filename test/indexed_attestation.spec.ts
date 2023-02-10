@@ -7,9 +7,9 @@ import {
     Root,
     Slot,
     ValidatorIndex
-} from "../src/eth2_schemas";
-import {List} from "../src/composit_type";
-import {MAX_VALIDATORS_PER_COMMITTEE} from "../src/constants";
+} from "../src/lib/eth2_schemas";
+import {List} from "../src/lib/composit_type";
+import {MAX_VALIDATORS_PER_COMMITTEE} from "../src/lib/constants";
 import {readSerializeData} from "./test_util";
 
 describe('IndexedAttestation Test', () => {

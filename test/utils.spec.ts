@@ -1,4 +1,4 @@
-import {merkleRoot, next_pow_of_two} from "../src/utils";
+import {merkleRoot, next_pow_of_two} from "../src/lib/utils";
 
 describe("Test next_pow_of_two", () => {
     test("1 is 1", () => {

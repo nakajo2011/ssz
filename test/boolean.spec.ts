@@ -1,4 +1,4 @@
-import {SSZBoolean} from "../src/basic_type";
+import {SSZBoolean} from "../src/lib/basic_type";
 
 describe('Boolean test', () => {
     describe('boolean値を1, 0に変換できること', () => {

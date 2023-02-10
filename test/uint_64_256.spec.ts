@@ -1,4 +1,4 @@
-import {Uint128, Uint256, Uint64} from "../src/basic_type";
+import {Uint128, Uint256, Uint64} from "../src/lib/basic_type";
 
 describe("Uint64-256 Tests", () => {
     describe('Uint64 test', () => {

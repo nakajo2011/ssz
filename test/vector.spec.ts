@@ -1,5 +1,5 @@
-import {Vector} from "../src/composit_type";
-import {Uint8} from "../src/basic_type";
+import {Vector} from "../src/lib/composit_type";
+import {Uint8} from "../src/lib/basic_type";
 import {generateArray} from "./test_util";
 
 describe('Vector test', () => {

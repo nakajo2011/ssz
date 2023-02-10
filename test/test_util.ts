@@ -1,7 +1,7 @@
 import fs from "fs";
 import {uncompressSync} from "snappy";
 import * as yaml from "js-yaml"
-import {BasicBase} from "../src/basic_type";
+import {BasicBase} from "../src/lib/basic_type";
 
 export const readSerializeData = (containerName:string, caseName:string):Buffer => {
     const snappy = fs.readFileSync(`test/resources/${containerName}/ssz_random/${caseName}/serialized.ssz_snappy`, "hex")
