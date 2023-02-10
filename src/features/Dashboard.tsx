@@ -166,20 +166,21 @@ function DashboardContent() {
                     p: 2,
                     display: 'flex',
                     flexDirection: 'column',
-                    height: 240,
+                    height: 320,
                   }}
                 >
                   <Params />
                 </Paper>
               </Grid>
-              {/* Recent Deposits */}
-              <Grid item xs={12} md={6} lg={6}>
+              {/* Result */}
+              <Grid item xs={12} md={12} lg={6}>
                 <Paper
                   sx={{
                     p: 2,
                     display: 'flex',
                     flexDirection: 'column',
-                    height: 240,
+                    height: 320,
+                    overflow: 'scroll',
                   }}
                 >
                   <Results />
