@@ -17,10 +17,6 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "buffer": "^6.0.3",
-    "js-yaml": "^4.1.0",
-    "snappy": "^7.2.2",
-    "typescript": "^4.9.4",
     "@emotion/react": "^11.10.5",
     "@emotion/styled": "^11.10.5",
     "@mui/icons-material": "^5.11.0",
@@ -33,11 +29,17 @@
     "@types/react": "^18.0.27",
     "@types/react-dom": "^18.0.10",
     "@types/react-redux": "^7.1.25",
+    "@types/react-router-dom": "^5.3.3",
+    "buffer": "^6.0.3",
+    "js-yaml": "^4.1.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-redux": "^8.0.5",
+    "react-router-dom": "^6.8.1",
     "react-scripts": "5.0.1",
     "recharts": "^2.3.2",
+    "snappy": "^7.2.2",
+    "typescript": "^4.9.4",
     "web-vitals": "^2.1.4"
   },
   "devDependencies": {

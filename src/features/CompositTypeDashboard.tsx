@@ -120,7 +120,7 @@ function DashboardContent() {
               noWrap
               sx={{ flexGrow: 1 }}
             >
-              Dashboard
+              CompositTypes
             </Typography>
           </Toolbar>
         </AppBar>
@@ -199,6 +199,6 @@ function DashboardContent() {
   );
 }
 
-export default function Dashboard() {
+export default function CompositTypeDashboard() {
   return <DashboardContent />;
 }
