@@ -1,13 +1,14 @@
 import {combineReducers, configureStore} from '@reduxjs/toolkit'
 import compositeTypeSlice from "./compositeTypeSlice"
 import basicTypeSlice from "./basicTypeSlice"
+import resultSlice from "./resultSlice";
 
-// ...
 
 export const store = configureStore({
     reducer: combineReducers({
         composite: compositeTypeSlice,
-        basic: basicTypeSlice
+        basic: basicTypeSlice,
+        sszResult: resultSlice,
     }),
 })
 // Infer the `RootState` and `AppDispatch` types from the store itself

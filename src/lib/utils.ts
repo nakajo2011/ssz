@@ -1,5 +1,6 @@
 import {BITS_PER_CHUNK} from "./constants";
-import {createHash} from "node:crypto";
+import * as CryptoJS from "crypto-js"
+import {Buffer} from 'buffer'; // for react
 
 export const count_chunk = (size: number, bit_size: number): number =>
     Math.floor(((bit_size * size) + (BITS_PER_CHUNK - 1)) / BITS_PER_CHUNK)
@@ -22,7 +23,11 @@ export const next_pow_of_two = (i: number): number => {
     }
 }
 
-export const sha256 = (val: Buffer) => createHash('sha256').update(val).digest()
+export const sha256 = (val: Buffer): Buffer => {
+    const body = CryptoJS.enc.Hex.parse(val.toString('hex'))
+    const conv = CryptoJS.SHA256(body)
+    return new Buffer(conv.toString(CryptoJS.enc.Hex), 'hex')
+}
 
 export const merkleizeAsBinary = (lh:Buffer, rh:Buffer): Buffer => {
     const res = Buffer.alloc(lh.length + rh.length)

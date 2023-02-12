@@ -2,7 +2,9 @@ import * as React from 'react';
 
 import { useAppSelector, useAppDispatch } from '../store/hooks'
 import {TextField, Box, MenuItem, InputLabel, Select, SelectChangeEvent, FormControl} from "@mui/material";
-import {changeCompositeType, changeBasicType, changeValue, BasicTypeOptions, CompositeTypeOptions} from "../store/compositeTypeSlice";
+import {changeCompositeType, changeBasicType, changeValue, CompositeTypeOptions} from "../store/compositeTypeSlice";
+import {BasicTypeOptions} from "../store/basicTypeSlice";
+import {changeCompositeParam} from "../store/resultSlice";
 
 export default function CompositeTypeParams() {
     const composite_type_name = useAppSelector(state => state.composite.composite_type_name)
@@ -12,11 +14,20 @@ export default function CompositeTypeParams() {
     const dispatch = useAppDispatch()
 
     const handleChangeCompositeType = (e: SelectChangeEvent) => {
-        dispatch(changeCompositeType(Object.values(CompositeTypeOptions).filter((t) => e.target.value === t.toString())[0]))
+        const composite_type_name = Object.values(CompositeTypeOptions).filter((t) => e.target.value === t.toString())[0]
+        dispatch(changeCompositeType(composite_type_name))
+        dispatch(changeCompositeParam({composite_type_name, basic_type_name, value}))
     }
 
     const handleChangeBasicType = (e: SelectChangeEvent) => {
-        dispatch(changeBasicType(Object.values(BasicTypeOptions).filter((t) => e.target.value === t.toString())[0]))
+        const basic_type_name = Object.values(BasicTypeOptions).filter((t) => e.target.value === t.toString())[0]
+        dispatch(changeBasicType(basic_type_name))
+        dispatch(changeCompositeParam({composite_type_name, basic_type_name, value}))
+    }
+
+    const handleChangeValue = (v: string) => {
+        dispatch(changeValue(v))
+        dispatch(changeCompositeParam({composite_type_name, basic_type_name, value: v}))
     }
 
     const compositeOptions = Array<JSX.Element>()
@@ -69,7 +80,7 @@ export default function CompositeTypeParams() {
               </FormControl>
               <FormControl fullWidth>
               <TextField id="param_value" label="Value" variant="outlined"
-                         value={value} onChange={e => dispatch(changeValue(e.target.value))}/>
+                         value={value} onChange={e => handleChangeValue(e.target.value)}/>
               </FormControl>
           </Box>
     );

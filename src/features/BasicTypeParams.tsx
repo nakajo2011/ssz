@@ -3,6 +3,7 @@ import * as React from 'react';
 import {useAppSelector, useAppDispatch} from '../store/hooks'
 import {TextField, Box, MenuItem, InputLabel, Select, SelectChangeEvent, FormControl} from "@mui/material";
 import {changeType, changeValue, BasicTypeOptions} from "../store/basicTypeSlice";
+import {changeBasicParam} from "../store/resultSlice";
 
 export default function BasicTypeParams() {
     const type_name = useAppSelector(state => state.basic.type_name)
@@ -10,7 +11,14 @@ export default function BasicTypeParams() {
     const dispatch = useAppDispatch()
 
     const handleChangeType = (e: SelectChangeEvent) => {
-        dispatch(changeType(Object.values(BasicTypeOptions).filter((t) => e.target.value === t.toString())[0]))
+        const type_name = Object.values(BasicTypeOptions).filter((t) => e.target.value === t.toString())[0]
+        dispatch(changeType(type_name))
+        dispatch(changeBasicParam({type_name, value}))
+    }
+
+    const handleChangeValue = (v: string) => {
+        dispatch(changeValue(v))
+        dispatch(changeBasicParam({type_name, value: v}))
     }
 
     const options = Array<JSX.Element>()
@@ -39,7 +47,7 @@ export default function BasicTypeParams() {
                     {options}
                 </Select>
                 <TextField id="param_value" label="Value" variant="outlined"
-                           value={value} onChange={e => dispatch(changeValue(e.target.value))}/>
+                           value={value} onChange={e => handleChangeValue(e.target.value)}/>
             </FormControl>
         </Box>
     );

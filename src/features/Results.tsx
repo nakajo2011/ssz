@@ -1,40 +1,10 @@
 import * as React from 'react';
 import Typography from '@mui/material/Typography';
 import Title from './Title';
-import {Uint8, Uint16, Uint32, Uint64, Uint128, Uint256, SSZBoolean} from "../lib/basic_type";
+import {Buffer} from 'buffer'; // for react
 
 import { useAppSelector } from '../store/hooks'
-import { RootState } from "../store";
 import {Alert, Box, BoxProps, Stack} from "@mui/material";
-
-const factory = (state: RootState) => {
-    try {
-        console.log(state.basic.type_name)
-        const value = state.basic.value
-        switch (state.basic.type_name) {
-            case "Uint8":
-                return new Uint8(parseInt(value))
-            case "Uint16":
-                return new Uint16(parseInt(value))
-            case "Uint32":
-                return new Uint32(parseInt(value))
-            case "Uint64":
-                return new Uint64(BigInt(value))
-            case "Uint128":
-                return new Uint128(BigInt(value))
-            case "Uint256":
-                return new Uint256(BigInt(value))
-            case "Boolean":
-                return new SSZBoolean(value !== '0')
-            default:
-                return undefined
-        }
-    } catch (e) {
-        console.error(e)
-        return undefined
-    }
-}
-
 
 function Item(props: BoxProps) {
     const { sx, ...other } = props;
@@ -109,13 +79,12 @@ function ByteDumpLine(props: ByteDumpLineProps) {
 }
 
 export default function Results() {
-    const state = useAppSelector(state => state)
+    const state = useAppSelector(state => state.sszResult)
     console.log("state=", state)
-    const res = factory(state)
-    if(res == undefined) {
+    if(state.hash_tree_root === undefined) {
         return (
             <Stack sx={{ width: '100%' }} spacing={2}>
-                <Alert severity="error">invalid params. type: {state.basic.type_name}, value: {state.basic.value}</Alert>
+                <Alert severity="error">invalid params. type: {state.errorMsg}</Alert>
             </Stack>
         )
     } else {
@@ -123,8 +92,8 @@ export default function Results() {
             <React.Fragment>
                 <Title>SSZ Result</Title>
                 <Box>
-                    <ByteDumpLine subject='hash_tree_root:' bytedata={res.hash_tree_root()}/>
-                    <ByteDumpLine subject='serialize:' bytedata={res.serialize()}/>
+                    <ByteDumpLine subject='hash_tree_root:' bytedata={new Buffer(state.hash_tree_root, 'hex')}/>
+                    <ByteDumpLine subject='serialize:' bytedata={new Buffer(state.serialize!, 'hex')}/>
                 </Box>
             </React.Fragment>
         );

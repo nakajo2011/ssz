@@ -1,33 +1,21 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import {Vector} from "../lib/composit_type";
-import {Uint8} from "../lib/basic_type";
+import {BasicTypeOptions} from "./basicTypeSlice";
 
-// sszで指定できる型をunionで定義
-export const BasicTypeOptions = {
-    Uint8: "Uint8",
-    Uint16: "Uint16",
-    Uint32: "Uint32",
-    Uint64: "Uint64",
-    Uint128: "Uint128",
-    Uint256: "Uint256",
-    Boolean: "Boolean"
-} as const;
 export const CompositeTypeOptions = {
     Vector: "Vector",
     List: "List",
 } as const;
-type BasicTypeOptions = typeof BasicTypeOptions[keyof typeof BasicTypeOptions];
 type CompositeTypeOptions = typeof CompositeTypeOptions[keyof typeof CompositeTypeOptions];
 
 // stateの型定義
-export type State = {
+export type CompositeParamState = {
     composite_type_name: CompositeTypeOptions;
     basic_type_name: BasicTypeOptions
     value: string
 };
 
 // 初期状態
-const initialState: State = {
+const initialState: CompositeParamState = {
     composite_type_name: 'Vector',
     basic_type_name: 'Uint8',
     value: "[1, 2]"

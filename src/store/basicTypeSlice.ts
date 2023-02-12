@@ -11,17 +11,17 @@ export const BasicTypeOptions = {
     Boolean: "Boolean"
 } as const;
 
-type BasicTypeOptions = typeof BasicTypeOptions[keyof typeof BasicTypeOptions];
+export type BasicTypeOptions = typeof BasicTypeOptions[keyof typeof BasicTypeOptions];
 type TypeOptions = BasicTypeOptions
 
 // stateの型定義
-export type State = {
+export type BasicParamState = {
     type_name: TypeOptions
     value: string
 };
 
 // 初期状態
-const initialState: State = {
+const initialState: BasicParamState = {
     type_name: 'Uint8',
     value: "20"
 };

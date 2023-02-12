@@ -1,7 +1,8 @@
 import {BasicBase, SSZType, Uint32} from "./basic_type";
 import {BITS_PER_BYTE, BYTES_PER_CHUNK, BYTES_PER_LENGTH_OFFSET} from "./constants";
 import {count_chunk, merkleRoot, next_pow_of_two} from "./utils";
-import assert from "node:assert";
+import {Buffer} from 'buffer'; // for react
+
 
 const sum = (list: number[]): bigint => {
     let res = BigInt(0)
@@ -173,8 +174,9 @@ export abstract class Container extends CompositeBase<SSZType> {
         const fixed_length: number[] =  fixed_parts.map((v) => v === null ? BYTES_PER_LENGTH_OFFSET : v.serialize().length)
         const variable_length: number[] = variable_parts.map((v) => v === null ? 0 : v.serialize().length)
         const total_length = sum(fixed_length) + sum(variable_length)
-        assert(total_length < BigInt("010000000000000000000000000000000000000000000000000000000000000000"),
-            "contents size is too large.")
+        if(total_length >= BigInt("010000000000000000000000000000000000000000000000000000000000000000")) {
+            throw Error("contents size is too large.")
+        }
 
         this.size = Number(total_length)
         this.chunks = this.payload.length
