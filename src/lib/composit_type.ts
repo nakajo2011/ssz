@@ -1,4 +1,4 @@
-import {BasicBase, SSZType, Uint32} from "./basic_type";
+import {BasicBase, SSZType, Uint256, Uint32} from "./basic_type";
 import {BITS_PER_BYTE, BYTES_PER_CHUNK, BYTES_PER_LENGTH_OFFSET} from "./constants";
 import {count_chunk, merkleRoot, next_pow_of_two} from "./utils";
 import {Buffer} from 'buffer'; // for react
@@ -98,6 +98,7 @@ export class List<T extends BasicBase> extends CompositeBase<T> {
     readonly payload: Array<T>
     readonly chunks: number
     readonly size: number
+    elem: T
 
     constructor(ctor: (new () => T), list: Array<T> = [], maxLength: number) {
         if(list.length > maxLength) {
@@ -106,9 +107,9 @@ export class List<T extends BasicBase> extends CompositeBase<T> {
         super()
         this.payload = list
         this.size = maxLength
-        const elem = new ctor()
-        this.chunks = count_chunk(elem.serialize().length * BITS_PER_BYTE, this.size)
-        this.value = Buffer.alloc(list.length * elem.serialize().length, 0)
+        this.elem = new ctor()
+        this.chunks = count_chunk(this.elem.serialize().length * BITS_PER_BYTE, this.payload.length)
+        this.value = Buffer.alloc(list.length * this.elem.serialize().length, 0)
 
         this._build()
     }
@@ -130,15 +131,21 @@ export class List<T extends BasicBase> extends CompositeBase<T> {
     }
 
     merkleize(): Buffer {
-        const limit = next_pow_of_two(this.chunks)
+        const limit = next_pow_of_two(this.chunk_count())
         const leafs = [...Array(limit).keys()].map(() => Buffer.alloc(BYTES_PER_CHUNK))
         let offset = 0
         for(const buf of leafs) {
+            // 元のデータを全部コピーし終えたら終わり。
+            if(offset >= this.value.length) {
+                break
+            }
             this.value.copy(buf, 0, offset, offset+BYTES_PER_CHUNK)
             offset += BYTES_PER_CHUNK
         }
         const maxDepth = Math.log2(limit)
-        return merkleRoot(leafs, maxDepth)
+        const chunkRoot = merkleRoot(leafs, maxDepth)
+        // Listの場合は最後にchunkRootとsizeのmerkleを取る
+        return merkleRoot([chunkRoot, new Uint256(BigInt(this.payload.length)).hash_tree_root()], 1)
     }
 
     pack(): Buffer {
@@ -152,7 +159,7 @@ export class List<T extends BasicBase> extends CompositeBase<T> {
     }
 
     chunk_count(): number {
-        return this.chunks
+        return  count_chunk(this.elem.serialize().length * BITS_PER_BYTE, this.size)
     }
 }
 

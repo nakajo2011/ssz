@@ -15,7 +15,6 @@ describe("DepsositData", () => {
         })
         test('hash_tree_root', () => {
             const rootData = readHashRoot("DepositData", "case_0")
-            console.log(subject.hash_tree_root())
             expect(subject.hash_tree_root()).toStrictEqual(rootData)
         })
     })

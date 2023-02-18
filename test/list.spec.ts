@@ -8,19 +8,19 @@ describe('List test', () => {
             describe('chunk size', () => {
                 test('length 4, elements size 2, then chunk size is 1', () => {
                     const listuint8 = new List(Uint8, generateArray(2, Uint8), 4)
-                    expect(listuint8.chunks).toBe(1)
+                    expect(listuint8.chunk_count()).toBe(1)
                 })
                 test('length 32, elements size 2, then chunk size is 1', () => {
                     const listuint8 = new List(Uint8, generateArray(2, Uint8), 32)
-                    expect(listuint8.chunks).toBe(1)
+                    expect(listuint8.chunk_count()).toBe(1)
                 })
                 test('length 33, elements size 2, then chunk size is 2', () => {
                     const listuint8 = new List(Uint8, generateArray(2, Uint8), 33)
-                    expect(listuint8.chunks).toBe(2)
+                    expect(listuint8.chunk_count()).toBe(2)
                 })
                 test('length 256, elements size 2, then chunk size is 8', () => {
                     const listuint8 = new List(Uint8, generateArray(2, Uint8), 256)
-                    expect(listuint8.chunks).toBe(8)
+                    expect(listuint8.chunk_count()).toBe(8)
                 })
             })
             describe('size out of error', () => {
@@ -61,22 +61,7 @@ describe('List test', () => {
                     0, 0, 0, 0, 0, 0, 0, 0,
                     0, 0, 0, 0, 0, 0, 0, 0,
                     0, 0, 0, 0, 0, 0, 0, 0,
-                    0, 0, 0, 0, 0, 0,
-
-                    0, 0, 0, 0, 0, 0, 0, 0,
-                    0, 0, 0, 0, 0, 0, 0, 0,
-                    0, 0, 0, 0, 0, 0, 0, 0,
-                    0, 0, 0, 0, 0, 0, 0, 0,
-
-                    0, 0, 0, 0, 0, 0, 0, 0,
-                    0, 0, 0, 0, 0, 0, 0, 0,
-                    0, 0, 0, 0, 0, 0, 0, 0,
-                    0, 0, 0, 0, 0, 0, 0, 0,
-
-                    0, 0, 0, 0, 0, 0, 0, 0,
-                    0, 0, 0, 0, 0, 0, 0, 0,
-                    0, 0, 0, 0, 0, 0, 0, 0,
-                    0, 0, 0, 0, 0, 0, 0, 0,
+                    0, 0, 0, 0, 0, 0
                 ]))
             })
         })

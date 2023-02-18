@@ -10,7 +10,7 @@ import {
 } from "../src/lib/eth2_schemas";
 import {List} from "../src/lib/composit_type";
 import {MAX_VALIDATORS_PER_COMMITTEE} from "../src/lib/constants";
-import {readSerializeData} from "./test_util";
+import {readHashRoot, readSerializeData} from "./test_util";
 
 describe('IndexedAttestation Test', () => {
     test('is_variable_type is true', () => {
@@ -41,6 +41,10 @@ describe('IndexedAttestation Test', () => {
         test('serialize', () => {
             const serializedData = readSerializeData("IndexedAttestation", "case_0")
             expect(subject.serialize()).toStrictEqual(serializedData)
+        })
+        test('hash_tree_root', () => {
+            const rootData = readHashRoot("IndexedAttestation", "case_0")
+            expect(subject.hash_tree_root()).toStrictEqual(rootData)
         })
     })
 })
