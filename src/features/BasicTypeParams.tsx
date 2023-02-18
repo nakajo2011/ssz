@@ -1,24 +1,31 @@
 import * as React from 'react';
 
-import {useAppSelector, useAppDispatch} from '../store/hooks'
+import {useAppDispatch} from '../store/hooks'
 import {TextField, Box, MenuItem, InputLabel, Select, SelectChangeEvent, FormControl} from "@mui/material";
-import {changeType, changeValue, BasicTypeOptions} from "../store/basicTypeSlice";
+import {BasicTypeOptions} from "../store/basicTypeSlice";
 import {changeBasicParam} from "../store/resultSlice";
+import {useState} from "react";
 
 export default function BasicTypeParams() {
-    const type_name = useAppSelector(state => state.basic.type_name)
-    const value = useAppSelector(state => state.basic.value)
     const dispatch = useAppDispatch()
+    const [type_name, setTypeName] = useState("")
+    const [value, setValue] = useState("20")
 
     const handleChangeType = (e: SelectChangeEvent) => {
-        const type_name = Object.values(BasicTypeOptions).filter((t) => e.target.value === t.toString())[0]
-        dispatch(changeType(type_name))
-        dispatch(changeBasicParam({type_name, value}))
+        setTypeName(e.target.value)
+        dispatchResult(e.target.value, value)
     }
 
     const handleChangeValue = (v: string) => {
-        dispatch(changeValue(v))
-        dispatch(changeBasicParam({type_name, value: v}))
+        setValue(v)
+        dispatchResult(type_name, v)
+    }
+
+    const dispatchResult = (type_name_str: string, value: string) => {
+        const type_names = Object.values(BasicTypeOptions).filter((t) => type_name_str === t.toString())
+        if(type_names.length > 0) {
+            dispatch(changeBasicParam({type_name: type_names[0], value}))
+        }
     }
 
     const options = Array<JSX.Element>()
@@ -44,6 +51,7 @@ export default function BasicTypeParams() {
                     label="Type"
                     onChange={handleChangeType}
                 >
+                    <MenuItem key="undefined" value=""><em>None</em></MenuItem>
                     {options}
                 </Select>
                 <TextField id="param_value" label="Value" variant="outlined"

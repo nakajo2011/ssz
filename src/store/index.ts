@@ -1,13 +1,11 @@
 import {combineReducers, configureStore} from '@reduxjs/toolkit'
 import compositeTypeSlice from "./compositeTypeSlice"
-import basicTypeSlice from "./basicTypeSlice"
 import resultSlice from "./resultSlice";
 
 
 export const store = configureStore({
     reducer: combineReducers({
         composite: compositeTypeSlice,
-        basic: basicTypeSlice,
         sszResult: resultSlice,
     }),
 })
