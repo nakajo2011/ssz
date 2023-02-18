@@ -29,7 +29,7 @@ export abstract class BasicBase implements SSZType {
      * serialize is 32bytes little endian.
      */
     serialize(): Buffer {
-        const res = new Buffer(this.value.length)
+        const res = Buffer.alloc(this.value.length)
         this.value.copy(res)
         return res.reverse()
     }
@@ -39,7 +39,7 @@ export abstract class BasicBase implements SSZType {
     }
 
     pack(): Buffer {
-        const res = new Buffer(BYTES_PER_CHUNK)
+        const res = Buffer.alloc(BYTES_PER_CHUNK)
         this.serialize().copy(res, 0)
         return res
     }
@@ -59,7 +59,7 @@ export abstract class BasicBase implements SSZType {
 
 abstract class UintBasePrimitive extends BasicBase {
     protected constructor(val: number, size: number) {
-        const buf = new Buffer(size)
+        const buf = Buffer.alloc(size)
         buf.writeUintBE(val, 0, size)
         super(buf)
     }
@@ -86,7 +86,7 @@ export class Uint32 extends UintBasePrimitive {
 abstract class UintBaseBigInt extends BasicBase {
     readonly byteSize: number
     protected constructor(val: string | bigint, size: number) {
-        const buf: Buffer = new Buffer(size)
+        const buf: Buffer = Buffer.alloc(size)
         let hexStr: string
         if (typeof val === "bigint") {
             hexStr = val.toString(16)
@@ -124,7 +124,7 @@ export class Uint256 extends UintBaseBigInt {
 
 export class SSZBoolean extends BasicBase {
     constructor(_bool: boolean) {
-        const buf = new Buffer(1)
+        const buf = Buffer.alloc(1)
         buf[0] = _bool ? 1: 0
         super(buf)
     }
