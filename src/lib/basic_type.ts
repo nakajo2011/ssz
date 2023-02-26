@@ -104,20 +104,20 @@ abstract class UintBaseBigInt extends BasicBase {
 }
 
 export class Uint64 extends UintBaseBigInt {
-    constructor(val: string | bigint = "0x00") {
+    constructor(val: string | bigint  = BigInt(0)) {
         super(val, 8)
     }
 
 }
 
 export class Uint128 extends UintBaseBigInt {
-    constructor(val:  string | bigint) {
+    constructor(val:  string | bigint = BigInt(0)) {
         super(val, 16)
     }
 }
 
 export class Uint256 extends UintBaseBigInt {
-    constructor(val:  string | bigint) {
+    constructor(val:  string | bigint = BigInt(0)) {
         super(val, 32)
     }
 }
