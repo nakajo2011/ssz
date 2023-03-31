@@ -1,33 +1,23 @@
 import * as React from 'react';
-import Typography from '@mui/material/Typography';
 import Title from './Title';
-import {Graphviz} from 'graphviz-react';
-import Box from "@mui/material/Box";
-import Divider from "@mui/material/Divider";
 import BinaryTree from "./binary_tree/BinaryTree";
+import {useState} from "react";
 
 export default function Merklizes() {
+    const [select_label, setSelectLabel] = useState("")
+
+    const handleNodeClick = (node: any) => {
+        console.log('Node clicked:', node);
+        setSelectLabel(node)
+    };
+
     return (
       <React.Fragment>
-          <Title>Merklize</Title>
-          <Typography component="h1">
-              TBD
-          </Typography>
-          <BinaryTree/>
-          <Box sx={{
-              width: "100px",
-              height: "100px",
-              background: "#ace7f2"}}>
-              <Divider sx={{
-                  transform: "rotate(135deg)",
-                  width: 40,
-                  border: 0,
-                  "border-top": "1px solid #333",
-                  mt: 1,
-                  padding: 0,
-                }}
-              />
-          </Box>
+          <Title>Merklizes</Title>
+          <BinaryTree
+              items={[["hoge1", "hoge2"],[null, "hoge3", "hoge4", "hoge5"]]}
+              onNodeClick={handleNodeClick}/>
+          {select_label}
       </React.Fragment>
     );
 }

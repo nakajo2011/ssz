@@ -1,9 +1,24 @@
 import * as React from 'react';
 import Box from "@mui/material/Box";
-import {BoxProps} from "@mui/material";
+import {BoxProps, Typography} from "@mui/material";
 
-function Item(props: BoxProps) {
-    const { sx, ...other } = props;
+type BinaryTreeProps = BoxProps & {
+    items: (string | null)[][];
+    onNodeClick?: (node: any) => void
+}
+
+type NodeProps = BoxProps & {
+    value?: string
+    onNodeClick?: (node: string|null) => void
+}
+
+function Node(props: NodeProps) {
+    const { sx, value, onNodeClick, ...other } = props;
+    const handleClick = () => {
+        if (onNodeClick && value) {
+            onNodeClick(value);
+        }
+    }
     return (
         <Box
             sx={{
@@ -21,31 +36,47 @@ function Item(props: BoxProps) {
                 fontWeight: '700',
                 ...sx,
             }}
+            onClick={handleClick}
             {...other}
-        />
+        >
+            <Typography align="center" variant="caption">
+                {value}
+            </Typography>
+        </Box>
     );
 }
 
-type ListItemProps = BoxProps & {
-    items: Array<null | string>
-}
 
-function ListItem(props: ListItemProps) {
-    const { sx, items, ...other } = props;
-    const list = items.map((s) => {
-        if(s === null) {
-            return <Item sx={{border: "0px solid"}}/>
-        } else {
-            return <Item>{s}</Item>
-        }
+function renderTree(items: (string|null)[][], handler?: (node: string|null) => void) {
+    const list = items.map((nodes, index) => {
+        const nlist = nodes.map((s, cindex) => {
+            const keyId = "node"+index+"_"+cindex
+            if(s === null) {
+                return <Node sx={{border: "0px solid"}} key={keyId}/>
+            } else {
+                return <Node onNodeClick={handler} value={s} key={keyId}/>
+            }
+        })
+        return (
+            <Box
+                sx={{
+                    display: 'flex',
+                    flexDirection: 'row',
+                    justifyContent: "space-around"
+                }}
+                key={"node_box_"+index}
+            >
+                {nlist}
+            </Box>
+        )
     })
 
     return (
         <Box
             sx={{
                 display: 'flex',
-                flexDirection: 'row',
-                justifyContent: "space-around"
+                flexDirection: 'column',
+                justifyContent: "space-around",
             }}
         >
             {list}
@@ -53,15 +84,17 @@ function ListItem(props: ListItemProps) {
     );
 }
 
-export default function BinaryTree() {
+export default function BinaryTree(props: BinaryTreeProps) {
+    const { sx, items, onNodeClick, ...other } = props;
     return (
         <Box
             sx={{
                 display: 'flex',
                 flexDirection: 'column',
-            }}>
-            <ListItem items={["hoge", "hoge"]}/>
-            <ListItem items={[null, "hoge", "hoge", "hoge"]}/>
+            }}
+            {...other}
+        >
+            {renderTree(items, onNodeClick)}
         </Box>
     );
 }
