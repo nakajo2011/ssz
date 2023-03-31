@@ -2,7 +2,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import {BasicBase, SSZBoolean, SSZType, Uint128, Uint16, Uint256, Uint32, Uint64, Uint8} from "../lib/basic_type";
 import {CompositeParamState} from "./compositeTypeSlice";
 import {BasicParamState} from "./basicTypeSlice";
-import {Vector} from "../lib/composit_type";
+import {List, Vector} from "../lib/composit_type";
 
 type basicFactoryParam = {
     type_name: string,
@@ -95,6 +95,9 @@ const composite_type_factory = (state: CompositeParamState): ResultState => {
             case "Vector":
                 res.instance = new Vector(toArray(value, state.basic_type_name))
                 break
+            case "List":
+                res.instance = new List(Uint8, toArray(value, state.basic_type_name), 4)
+                break
             default:
                 res.instance = undefined
                 res.errorMsg = `type: ${state.composite_type_name}<${state.basic_type_name}> is not support yet.`
@@ -132,7 +135,6 @@ const resultSlice = createSlice({
     },
 })
 
-// action creatorもこんな風に取り出して公開できて、dispatchでReactから利用できる
 export const { changeBasicParam, changeCompositeParam } = resultSlice.actions;
 
 export default resultSlice.reducer

@@ -14,7 +14,7 @@ function Item(props: BoxProps) {
                 display: 'inline',
                 p: 1,
                 m: 0,
-                bgcolor: (theme) => (theme.palette.mode === 'dark' ? '#101010' : 'grey.100'),
+                background: (theme) => (theme.palette.mode === 'dark' ? '#101010' : 'grey.100'),
                 color: (theme) => (theme.palette.mode === 'dark' ? 'grey.300' : 'grey.800'),
                 border: '1px solid',
                 borderColor: (theme) =>
