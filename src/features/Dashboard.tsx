@@ -19,6 +19,7 @@ import { mainListItems } from './listItems';
 import Results from "./Results";
 import Params from "./Params";
 import Merklizes from "./Merklizes";
+import NodeDetail from "./NodeDetail";
 
 function Copyright(props: any) {
   return (
@@ -184,12 +185,18 @@ function DashboardContent() {
                   <Results />
                 </Paper>
               </Grid>
-              {/* Merklizes */}
-              <Grid item xs={12}>
+              {/* MerklizesTree */}
+              <Grid item xs={12} md={12} lg={6}>
                 <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
                   <Merklizes />
                 </Paper>
               </Grid>
+              {/* NodeDetail */}
+              <Grid item xs={12} md={12} lg={6}>
+              <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
+                  <NodeDetail />
+              </Paper>
+            </Grid>
             </Grid>
             <Copyright sx={{ pt: 4 }} />
           </Container>
