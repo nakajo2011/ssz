@@ -9,7 +9,7 @@ export default function NodeDetail() {
       <React.Fragment>
           <Title>NodeDetail</Title>
           <Typography>
-              test: {state.value}
+              chunk: {state.value}
           </Typography>
       </React.Fragment>
     );
