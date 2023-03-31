@@ -13,6 +13,7 @@ type basicFactoryParam = {
 export type ResultState = {
     hash_tree_root?: string
     serialize?: string
+    chunks?: string[]
     errorMsg?: string
 };
 
@@ -69,12 +70,14 @@ const conv = (fr: FactoryReturn): ResultState => {
         return {
             hash_tree_root: fr.instance.hash_tree_root().toString('hex'),
             serialize: fr.instance.serialize().toString('hex'),
+            chunks: fr.instance.pack().map((b) => b.toString('hex')),
             errorMsg: undefined
         }
     } else {
         return {
             hash_tree_root: undefined,
             serialize: undefined,
+            chunks: undefined,
             errorMsg: fr.errorMsg
         }
     }
@@ -119,6 +122,7 @@ const composite_type_factory = (state: CompositeParamState): ResultState => {
 const initialState: ResultState = {
     hash_tree_root: undefined,
     serialize: undefined,
+    chunks: undefined,
     errorMsg: undefined
 };
 

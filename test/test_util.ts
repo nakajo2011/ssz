@@ -31,3 +31,12 @@ export const generateArray = <T extends BasicBase>(length: number, ctor: { new (
     }
     return vec
 }
+
+export const generateArrayAsBigInt = <T extends BasicBase>(length: number, ctor: { new (val:bigint): T}): T[] => {
+    const vec: T[] = Array(length)
+
+    for(let i:number = 0; i < length; i++) {
+        vec[i] = new ctor(BigInt(i+1))
+    }
+    return vec
+}

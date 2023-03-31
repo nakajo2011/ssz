@@ -1,6 +1,6 @@
 import {Vector} from "../src/lib/composit_type";
-import {Uint8} from "../src/lib/basic_type";
-import {generateArray} from "./test_util";
+import {Uint128, Uint8} from "../src/lib/basic_type";
+import {generateArray, generateArrayAsBigInt} from "./test_util";
 
 describe('Vector test', () => {
     describe('chunks length', () => {
@@ -78,6 +78,32 @@ describe('Vector test', () => {
                             0, 0, 0, 0, 0, 0, 0
                         ])
                     ])
+            })
+        })
+    })
+
+    describe('Uint128 Vector', () => {
+        describe('Vector elements are [1, 2, 3, 4, 5]', () => {
+            const subject = (): Vector<Uint128> => {
+                return new Vector<Uint128>(generateArrayAsBigInt(5, Uint128))
+            }
+            test('serialized to [1, 2, 3, 4, 5] uint128', () => {
+                expect(subject().serialize()).toStrictEqual(Buffer.from(
+                    '0100000000000000000000000000000002000000000000000000000000000000030000000000000000000000000000000400000000000000000000000000000005000000000000000000000000000000',
+                    'hex'))
+            })
+            test('pack', () => {
+                expect(subject().pack()).toStrictEqual([
+                    Buffer.from('0100000000000000000000000000000002000000000000000000000000000000', 'hex'),
+                    Buffer.from('0300000000000000000000000000000004000000000000000000000000000000', 'hex'),
+                    Buffer.from('0500000000000000000000000000000000000000000000000000000000000000', 'hex'),
+                ])
+            })
+            test('merkleize', () => {
+                expect(subject().merkleize()).toStrictEqual(
+                    Buffer.from(
+                        '916d6bb40b4c2d26e074a202a3c8b831e137d1c0c7d1a974a3d333cd364d3db4',
+                        'hex'))
             })
         })
     })

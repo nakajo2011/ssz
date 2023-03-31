@@ -68,11 +68,8 @@ export class Vector<T extends BasicBase> extends CompositeBase<T> {
     merkleize(): Buffer {
         const limit = next_pow_of_two(this.chunks)
         const leafs = [...Array(limit).keys()].map(() => Buffer.alloc(BYTES_PER_CHUNK))
-        let offset = 0
-        for(const buf of leafs) {
-            this.value.copy(buf, 0, offset, offset+BYTES_PER_CHUNK)
-            offset += BYTES_PER_CHUNK
-        }
+        const chunks = this.pack()
+        chunks.forEach((c, index) => leafs[index] = c)
         const maxDepth = Math.log2(limit)
         return merkleRoot(leafs, maxDepth)
     }

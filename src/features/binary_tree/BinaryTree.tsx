@@ -9,11 +9,12 @@ type BinaryTreeProps = BoxProps & {
 
 type NodeProps = BoxProps & {
     value?: string
+    label?: string
     onNodeClick?: (node: string|null) => void
 }
 
 function Node(props: NodeProps) {
-    const { sx, value, onNodeClick, ...other } = props;
+    const { sx, value, label, onNodeClick, ...other } = props;
     const handleClick = () => {
         if (onNodeClick && value) {
             onNodeClick(value);
@@ -40,7 +41,7 @@ function Node(props: NodeProps) {
             {...other}
         >
             <Typography align="center" variant="caption">
-                {value}
+                {label}
             </Typography>
         </Box>
     );
@@ -48,13 +49,13 @@ function Node(props: NodeProps) {
 
 
 function renderTree(items: (string|null)[][], handler?: (node: string|null) => void) {
-    const list = items.map((nodes, index) => {
-        const nlist = nodes.map((s, cindex) => {
-            const keyId = "node"+index+"_"+cindex
+    const list = items.map((nodes, row) => {
+        const nlist = nodes.map((s, col) => {
+            const keyId = "node"+row+"_"+col
             if(s === null) {
                 return <Node sx={{border: "0px solid"}} key={keyId}/>
             } else {
-                return <Node onNodeClick={handler} value={s} key={keyId}/>
+                return <Node onNodeClick={handler} value={s} label={"chunk"+col} key={keyId}/>
             }
         })
         return (
@@ -64,7 +65,7 @@ function renderTree(items: (string|null)[][], handler?: (node: string|null) => v
                     flexDirection: 'row',
                     justifyContent: "space-around"
                 }}
-                key={"node_box_"+index}
+                key={"node_box_"+row}
             >
                 {nlist}
             </Box>
