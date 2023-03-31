@@ -24,11 +24,10 @@ export abstract class CompositeBase<T extends SSZType> implements SSZType {
 
     abstract merkleize(): Buffer
 
-    abstract pack(): Buffer
+    abstract pack(): Buffer[]
 
     abstract is_variable_size(): boolean
     abstract chunk_count(): number
-
 }
 
 export class Vector<T extends BasicBase> extends CompositeBase<T> {
@@ -78,10 +77,14 @@ export class Vector<T extends BasicBase> extends CompositeBase<T> {
         return merkleRoot(leafs, maxDepth)
     }
 
-    pack(): Buffer {
-        const packed = Buffer.alloc(this.chunks * BYTES_PER_CHUNK, 0)
-        this.value.copy(packed)
-        return packed
+    pack(): Buffer[] {
+        const leafs = [...Array(this.chunks).keys()].map(() => Buffer.alloc(BYTES_PER_CHUNK))
+        let offset = 0
+        for(const buf of leafs) {
+            this.value.copy(buf, 0, offset, offset+BYTES_PER_CHUNK)
+            offset += BYTES_PER_CHUNK
+        }
+        return leafs
     }
 
     is_variable_size(): boolean {
@@ -148,10 +151,14 @@ export class List<T extends BasicBase> extends CompositeBase<T> {
         return merkleRoot([chunkRoot, new Uint256(BigInt(this.payload.length)).hash_tree_root()], 1)
     }
 
-    pack(): Buffer {
-        const packed = Buffer.alloc(this.chunks * BYTES_PER_CHUNK, 0)
-        this.value.copy(packed)
-        return packed
+    pack(): Buffer[] {
+        const leafs = [...Array(this.chunks).keys()].map(() => Buffer.alloc(BYTES_PER_CHUNK))
+        let offset = 0
+        for(const buf of leafs) {
+            this.value.copy(buf, 0, offset, offset+BYTES_PER_CHUNK)
+            offset += BYTES_PER_CHUNK
+        }
+        return leafs
     }
 
     is_variable_size(): boolean {
@@ -215,8 +222,13 @@ export abstract class Container extends CompositeBase<SSZType> {
         return this.value
     }
 
-    pack(): Buffer {
-        return Buffer.alloc(4)
+    pack(): Buffer[] {
+        const limit = this.chunk_count()
+        const buffers = [...Array(limit).keys()].map(() => Buffer.alloc(BYTES_PER_CHUNK))
+        this.payload.forEach((p, i) => {
+            buffers[i] = p.hash_tree_root()
+        })
+        return buffers
     }
 
     hash_tree_root(): Buffer {

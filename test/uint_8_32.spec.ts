@@ -23,13 +23,15 @@ describe('Uint8-32 tests', () => {
         describe("pack", () => {
             test("35 serialize to 0x23 000000.... with right padded. ", () => {
                 const uint8 = new Uint8(35)
-                expect(uint8.pack()).toStrictEqual(Buffer.from([
-                    0x23,
-                    0, 0, 0, 0, 0, 0, 0, 0,
-                    0, 0, 0, 0, 0, 0, 0, 0,
-                    0, 0, 0, 0, 0, 0, 0, 0,
-                    0, 0, 0, 0, 0, 0, 0
-                ]))
+                expect(uint8.pack()).toStrictEqual([
+                    Buffer.from([
+                        0x23,
+                        0, 0, 0, 0, 0, 0, 0, 0,
+                        0, 0, 0, 0, 0, 0, 0, 0,
+                        0, 0, 0, 0, 0, 0, 0, 0,
+                        0, 0, 0, 0, 0, 0, 0
+                    ])
+                ])
             })
         })
 
@@ -66,13 +68,15 @@ describe('Uint8-32 tests', () => {
         describe("pack", () => {
             test("258 serialize to 0x0201 000000.... with right padded. ", () => {
                 const uint16 = new Uint16(258)
-                expect(uint16.pack()).toStrictEqual(Buffer.from([
-                    0x02, 0x01,
-                    0, 0, 0, 0, 0, 0, 0, 0,
-                    0, 0, 0, 0, 0, 0, 0, 0,
-                    0, 0, 0, 0, 0, 0, 0, 0,
-                    0, 0, 0, 0, 0, 0
-                ]))
+                expect(uint16.pack()).toStrictEqual([
+                    Buffer.from([
+                        0x02, 0x01,
+                        0, 0, 0, 0, 0, 0, 0, 0,
+                        0, 0, 0, 0, 0, 0, 0, 0,
+                        0, 0, 0, 0, 0, 0, 0, 0,
+                        0, 0, 0, 0, 0, 0
+                    ])
+                ])
             })
         })
 
@@ -108,13 +112,15 @@ describe('Uint8-32 tests', () => {
         describe("pack", () => {
             test("65538 serialize to 0x02000100 000000.... with right padded. ", () => {
                 const uint32 = new Uint32(65538)
-                expect(uint32.pack()).toStrictEqual(Buffer.from([
-                    0x02, 0x00, 0x01, 0x00,
-                    0, 0, 0, 0, 0, 0, 0, 0,
-                    0, 0, 0, 0, 0, 0, 0, 0,
-                    0, 0, 0, 0, 0, 0, 0, 0,
-                    0, 0, 0, 0
-                ]))
+                expect(uint32.pack()).toStrictEqual([
+                    Buffer.from([
+                        0x02, 0x00, 0x01, 0x00,
+                        0, 0, 0, 0, 0, 0, 0, 0,
+                        0, 0, 0, 0, 0, 0, 0, 0,
+                        0, 0, 0, 0, 0, 0, 0, 0,
+                        0, 0, 0, 0
+                    ])
+                ])
             })
         })
     })

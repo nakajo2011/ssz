@@ -8,7 +8,7 @@ export interface SSZType {
     readonly value: Buffer
     serialize(): Buffer
     hash_tree_root(): Buffer
-    pack(): Buffer
+    pack(): Buffer[]
     merkleize(): Buffer
     chunk_count(): number
     is_variable_size(): boolean
@@ -38,14 +38,14 @@ export abstract class BasicBase implements SSZType {
         return this.merkleize()
     }
 
-    pack(): Buffer {
+    pack(): Buffer[] {
         const res = Buffer.alloc(BYTES_PER_CHUNK)
         this.serialize().copy(res, 0)
-        return res
+        return [res]
     }
 
     merkleize(): Buffer {
-        return this.pack()
+        return this.pack()[0]
     }
 
     is_variable_size(): boolean {

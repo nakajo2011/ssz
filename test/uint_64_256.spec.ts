@@ -19,14 +19,14 @@ describe("Uint64-256 Tests", () => {
         })
 
         describe("serialize", () => {
-            test("4294967298 serialize to 0x0200000001000000", () =>{
+            test("4294967298 serialize to 0x0200000001000000", () => {
                 const uint64 = new Uint64(BigInt(4294967298))
                 expect(uint64.serialize()).toStrictEqual(Buffer.from([
                     2, 0, 0, 0, 1, 0, 0, 0
                 ]))
             })
 
-            test("1074290484554641408 serialize to 0x003076fd80a5e80e", () =>{
+            test("1074290484554641408 serialize to 0x003076fd80a5e80e", () => {
                 const uint64 = new Uint64(BigInt("1074290484554641408"))
                 expect(uint64.serialize()).toStrictEqual(Buffer.from([
                     0x00, 0x30, 0x76, 0xfd, 0x80, 0xa5, 0xe8, 0x0e
@@ -37,12 +37,14 @@ describe("Uint64-256 Tests", () => {
         describe("pack", () => {
             test("1074290484554641408 serialize to 0x000376fd80a5e80e 000000.... with right padded. ", () => {
                 const uint64 = new Uint64(BigInt("1074290484554641408"))
-                expect(uint64.pack()).toStrictEqual(Buffer.from([
-                    0x00, 0x30, 0x76, 0xfd, 0x80, 0xa5, 0xe8, 0x0e,
-                    0, 0, 0, 0, 0, 0, 0, 0,
-                    0, 0, 0, 0, 0, 0, 0, 0,
-                    0, 0, 0, 0, 0, 0, 0, 0
-                ]))
+                expect(uint64.pack()).toStrictEqual([
+                    Buffer.from([
+                        0x00, 0x30, 0x76, 0xfd, 0x80, 0xa5, 0xe8, 0x0e,
+                        0, 0, 0, 0, 0, 0, 0, 0,
+                        0, 0, 0, 0, 0, 0, 0, 0,
+                        0, 0, 0, 0, 0, 0, 0, 0
+                    ])
+                ])
             })
         })
 
@@ -76,7 +78,7 @@ describe("Uint64-256 Tests", () => {
 
         describe("serialize", () => {
             // Uint128 need  16bytes padding
-            test("4294967298 serialize to 0x0200000001000000 0000000000000000", () =>{
+            test("4294967298 serialize to 0x0200000001000000 0000000000000000", () => {
                 const uint128 = new Uint128(BigInt(4294967298))
                 expect(uint128.serialize()).toStrictEqual(Buffer.from([
                     2, 0, 0, 0, 1, 0, 0, 0,
@@ -84,7 +86,7 @@ describe("Uint64-256 Tests", () => {
                 ]))
             })
 
-            test("1074290484554641408 serialize to 0x000376fd80a5e80e 0000000000000000", () =>{
+            test("1074290484554641408 serialize to 0x000376fd80a5e80e 0000000000000000", () => {
                 // expect from https://www.ssz.dev/visualizer
                 const uint128 = new Uint128(BigInt("1074290484554641408"))
                 expect(uint128.serialize()).toStrictEqual(Buffer.from([
@@ -93,7 +95,7 @@ describe("Uint64-256 Tests", () => {
                 ]))
             })
 
-            test("149645059347763192342463364210314182657 serialize to 0x0100000000000000 00f0b0a90f979470", () =>{
+            test("149645059347763192342463364210314182657 serialize to 0x0100000000000000 00f0b0a90f979470", () => {
                 const uint128 = new Uint128(BigInt("149645059347763192342463364210314182657"))
                 expect(uint128.serialize()).toStrictEqual(Buffer.from([
                     0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -105,12 +107,14 @@ describe("Uint64-256 Tests", () => {
         describe("pack", () => {
             test("149645059347763192342463364210314182657 serialize to 0x010000000000000000f0b0a90f979470 000000.... with right padded. ", () => {
                 const uint128 = new Uint128(BigInt("149645059347763192342463364210314182657"))
-                expect(uint128.pack()).toStrictEqual(Buffer.from([
-                    0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-                    0x00, 0xf0, 0xb0, 0xa9, 0x0f, 0x97, 0x94, 0x70,
-                    0, 0, 0, 0, 0, 0, 0, 0,
-                    0, 0, 0, 0, 0, 0, 0, 0
-                ]))
+                expect(uint128.pack()).toStrictEqual([
+                    Buffer.from([
+                        0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+                        0x00, 0xf0, 0xb0, 0xa9, 0x0f, 0x97, 0x94, 0x70,
+                        0, 0, 0, 0, 0, 0, 0, 0,
+                        0, 0, 0, 0, 0, 0, 0, 0
+                    ])
+                ])
             })
         })
 
@@ -136,7 +140,7 @@ describe("Uint64-256 Tests", () => {
 
         describe("serialize", () => {
             // Uint256 not need padding.
-            test("4294967298 serialize to 0x00{56} 0000000100000002 ", () =>{
+            test("4294967298 serialize to 0x00{56} 0000000100000002 ", () => {
                 const uint256 = new Uint256(BigInt(4294967298))
                 expect(uint256.serialize()).toStrictEqual(Buffer.from(
                     [
@@ -148,7 +152,7 @@ describe("Uint64-256 Tests", () => {
             })
 
             test("96814945308074128438355407024091610994943375043996834784544491954722220015616 " +
-                "serialize to little-endian", () =>{
+                "serialize to little-endian", () => {
                 const uint256 = new Uint256(BigInt("96814945308074128438355407024091610994943375043996834784544491954722220015616"))
                 expect(uint256.serialize()).toStrictEqual(Buffer.from(
                     [
@@ -163,12 +167,14 @@ describe("Uint64-256 Tests", () => {
         describe("pack", () => {
             test("96814945308074128438355407024091610994943375043996834784544491954722220015616 pack to little-endian", () => {
                 const uint256 = new Uint256(BigInt("96814945308074128438355407024091610994943375043996834784544491954722220015616"))
-                expect(uint256.pack()).toStrictEqual(Buffer.from([
-                    0xd6, 0x0b, 0x51, 0x32, 0x26, 0xd9, 0x00, 0x00,
-                    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-                    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-                    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-                ]).reverse())
+                expect(uint256.pack()).toStrictEqual([
+                    Buffer.from([
+                        0xd6, 0x0b, 0x51, 0x32, 0x26, 0xd9, 0x00, 0x00,
+                        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+                        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+                        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+                    ]).reverse()
+                ])
             })
         })
 

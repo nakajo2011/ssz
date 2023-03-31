@@ -14,7 +14,7 @@ describe('Boolean test', () => {
     })
 
     describe("serialize", () => {
-        test("true serialize to 0x01", () =>{
+        test("true serialize to 0x01", () => {
             const bool = new SSZBoolean(true)
             expect(bool.serialize()).toStrictEqual(Buffer.from([1
             ]))
@@ -24,13 +24,15 @@ describe('Boolean test', () => {
     describe("pack", () => {
         test("true pack to 0x01 000000.... with right padded. ", () => {
             const bool = new SSZBoolean(true)
-            expect(bool.pack()).toStrictEqual(Buffer.from([
-                0x01,
-                0, 0, 0, 0, 0, 0, 0, 0,
-                0, 0, 0, 0, 0, 0, 0, 0,
-                0, 0, 0, 0, 0, 0, 0, 0,
-                0, 0, 0, 0, 0, 0, 0
-            ]))
+            expect(bool.pack()).toStrictEqual([
+                Buffer.from([
+                    0x01,
+                    0, 0, 0, 0, 0, 0, 0, 0,
+                    0, 0, 0, 0, 0, 0, 0, 0,
+                    0, 0, 0, 0, 0, 0, 0, 0,
+                    0, 0, 0, 0, 0, 0, 0
+                ])
+            ])
         })
     })
 
